@@ -83,7 +83,7 @@ onBeforeUnmount(()=>{
                                 <tr v-for="upload in $page.props.uploaded" :key="upload.id">
                                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{  upload.human_created_at }}</td>
                                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ upload.FILENAME }}</td>
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ upload.STATUS }}</td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm"><span :class="{'bg-red-400 text-white':upload.STATUS == 'FAILED', 'bg-green-300 text-white': upload.STATUS == 'COMPLETED' }">{{ upload.STATUS }}</span></td>
                                 </tr>
                             </tbody>
                         </table>
