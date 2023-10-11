@@ -1,6 +1,6 @@
 <script setup>
-import { Head, Link,useForm } from '@inertiajs/vue3';
-import { onMounted, onUnmounted } from 'vue'
+import { Head, Link,useForm,router } from '@inertiajs/vue3';
+import { onMounted, onUnmounted,onBeforeUnmount } from 'vue'
 
 const form = useForm({
     file:""
@@ -8,7 +8,30 @@ const form = useForm({
 
 function submit() {
   form.post(route('upload'));
+  form.reset();
 }
+
+
+
+const interval = setInterval(function () {
+              router.reload({
+                onFinish:()=>{
+                     router.reload({
+                        preserveScroll:true,
+                        only:['uploaded'],
+                        onFinish:() => {
+
+                        }
+                    })
+                }
+              })
+          }.bind(this), 3000);
+
+onBeforeUnmount(()=>{
+ clearInterval( interval);
+})
+
+
 
 </script>
 
@@ -38,7 +61,7 @@ function submit() {
                                         </p>
 
                                     </div>
-                                      <input type="file" name="file" id="csv" @input="form.file = $event.target.files[0]"  required="required" multiple="multiple" class=" absolute w-full h-full top-0 left-0 right-0 bottom-0 "/>
+                                      <input type="file" name="file" id="csv" @input="form.file = $event.target.files[0]"  required="required" multiple="multiple" class="text-white absolute w-full h-full top-0 left-0 right-0 bottom-0 "/>
 
                                     </div>
                         </div>
@@ -58,7 +81,7 @@ function submit() {
                             </thead>
                             <tbody>
                                 <tr v-for="upload in $page.props.uploaded" :key="upload.id">
-                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{  upload.created_at }}</td>
+                                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{  upload.human_created_at }}</td>
                                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ upload.FILENAME }}</td>
                                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{{ upload.STATUS }}</td>
                                 </tr>

@@ -7,4 +7,7 @@
 - php artisan make:model CsvUpload -m
 - php artisan make:request UploadCsvRequest
 
-
+composer install
+php artisan migrate
+php artisan serve
+php artisan horizon

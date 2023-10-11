@@ -32,8 +32,8 @@ class ProductJob implements ShouldQueue
         $header = fgetcsv($file);
 
         $chunkSize = 1000;
-        DB::beginTransaction();
         $s = CsvUpload::where('FILETEMP', $this->filePath)->update(['STATUS' => "PROCESSING"]);
+        DB::beginTransaction();
         try {
             $data = [];
             $rowCount = 0;
@@ -67,8 +67,8 @@ class ProductJob implements ShouldQueue
 
 
         } catch (\Exception $e) {
-            CsvUpload::where('FILETEMP', $this->filePath)->update(['STATUS' => "FAILED"]);
             DB::rollback();
+            CsvUpload::where('FILETEMP', $this->filePath)->update(['STATUS' => "FAILED"]);
             throw $e;
         }
             fclose($file);
